@@ -6,15 +6,8 @@ spring:
     password: root
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
-  rabbitmq:
-    listener:
-      simple:
-        retry:
-          enabled: true
-          initial-interval: 1s
-          max-attempts: 5
-          max-interval: 5s
-          multiplier: 2
+  kafka:
+    bootstrap-servers: localhost:20010
 
 server:
   port: 8085
@@ -32,14 +25,11 @@ logging:
     org.example.theatre.master: INFO
     org.springframework.web: TRACE
 
-message:
-  messageConfiguration:
-    host: localhost
-    port: 20004
-    username: guest
-    password: guest
-    virtualHost: snk-rmq
-  theatreDetailsExchangeConfiguration:
-    exchange: movieScheduleExchange
-    routingKey: movie.theatre.details
-    queue: theatreDetailsQueue
+kafka:
+  movieBookingApi:
+    groupName: movie-schedule
+    theatreDetails:
+      topic:
+        request: movie-theatre-details-request
+        response: movie-theatre-details-response
+        serialization-class: org.example.movie.core.common.schedule.MovieDetailsRequest
